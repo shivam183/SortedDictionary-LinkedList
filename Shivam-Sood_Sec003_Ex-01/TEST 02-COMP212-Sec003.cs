@@ -1,22 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Shivam_Sood_Sec003_Ex_01
 {
     public partial class Form1 : Form
     {
+        //Object of Accout class not Initialized
         Account account;
+        /// <summary>
+        /// Sorted Dictionary with intger as key that will store account numbers and account as object
+        /// to retrive any information as required for example name, balance etc.
+        /// </summary>
         SortedDictionary<int, Account> accounts = new SortedDictionary<int, Account>();
-
+        /// <summary>
+        /// Linked List for second part of Exam it is of type double 
+        /// </summary>
         LinkedList<double> generatedLists = new LinkedList<double>();
-
+        // object of Random class to obtain random integers
         Random rng = new Random();
         public Form1()
         {
@@ -28,18 +31,28 @@ namespace Shivam_Sood_Sec003_Ex_01
 
             try
             {
+                //Check if any TextBoxes are Empty
                 if (string.IsNullOrEmpty(tbAccNo.Text) || string.IsNullOrEmpty(tbCustName.Text) || string.IsNullOrEmpty(tbBalance.Text) || string.IsNullOrEmpty(tbBankerName.Text))
                 {
                     throw new NoNullAllowedException();
                 }
+                //Trying to Parse the value from Textbox to Intgers. Throws an Error if fails
+                //TryParsing is better if not using try/catch. Works both ways though.
                 int accno;
-                if ((accno = int.Parse(tbAccNo.Text)) < 0)
+                if (int.TryParse(tbAccNo.Text,out int results))
                 {
                     throw new FormatException();
                 }
-
+                else
+                {
+                    accno = results;
+                }
+                //Don't need to check for validation Name can br anything
+                //Even Number 
                 string name = tbCustName.Text;
 
+                //Trying to Parse the value from Textbox to Double. Throws an Error if fails
+                //Decimal value type is better for Handling money for precision in decimal points 
                 decimal balance;
                 if (!decimal.TryParse(tbBalance.Text, out decimal result))
                 {
@@ -49,26 +62,32 @@ namespace Shivam_Sood_Sec003_Ex_01
                 {
                     balance = result;
                 }
-
+                //Don't need to Check for validation
                 string bankerName = tbBankerName.Text;
-
+                //Calling non-default constructor and adding values from all textboxs and making new account
+                //Initialized the Object here. Better to do it here because sometimes it can throw NullPointException
                 account = new Account(accno, name, balance, bankerName);
+                //MessageBox Display after account gets added sucessfully
                 MessageBox.Show($"New Account with name {name} is added sucessfully", "Sucess", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
+                //Adding the newly made Account to SortedDictionary with key as account number and Account as an Value
                 accounts.Add(accno, account);
-
+                //Making all TextBoxes text null so thats its ready to add another account 
+                //Saves Time
                 tbAccNo.Text = null;
                 tbCustName.Text = null;
                 tbBalance.Text = null;
                 tbBankerName.Text = null;
 
             }
+            //Catching all types of Exception Specified Above
             catch (Exception ex)
             {
+                //Checking for FormatException
                 if (ex is FormatException)
                 {
                     MessageBox.Show($"Please Enter an positive Integer into Account Number Box or Balance Box", "Wrong Input", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+                //Checking For NoNullAllowedException
                 if (ex is NoNullAllowedException)
                 {
                     MessageBox.Show("All Fields are Required", "Empty Fields", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -78,20 +97,30 @@ namespace Shivam_Sood_Sec003_Ex_01
 
         }
 
-
+        /// <summary>
+        /// This Methods Check first Checks for Empty Textbox then Try to Parse the Entered Value
+        /// then It Checks Wheather the Entered Account Number Exist By using the "ContainsKey" method
+        /// If it Exist then Remove the Entered Account Number Otherwise Shows No Account Exist
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnDelete_Click(object sender, EventArgs e)
         {
 
             try
-            {
+            {   
                 if (string.IsNullOrEmpty(tbAccNo.Text))
                 {
                     throw new NoNullAllowedException();
                 }
                 int accno;
-                if ((accno = int.Parse(tbAccNo.Text)) < 0)
+                if (int.TryParse(tbAccNo.Text,out int result))
                 {
                     throw new FormatException();
+                }
+                else
+                {
+                    accno = result;
                 }
 
                 if (accounts.ContainsKey(accno))
@@ -119,6 +148,12 @@ namespace Shivam_Sood_Sec003_Ex_01
 
 
         }
+        /// <summary>
+        /// This Method First Check if the Sorted Dictionary is Empty or Not
+        /// If not then goes through all the elements and displays them in the output multiline textbox
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
 
         private void BtnDisplay_Click(object sender, EventArgs e)
         {
@@ -142,7 +177,13 @@ namespace Shivam_Sood_Sec003_Ex_01
         }
 
 
-
+        /// <summary>
+        /// This Method first checks for empty tetbox then try to parse the input from user
+        /// then checks of the account exist for entered key using "ContainsKey" Method
+        /// if account found just display it exist otherwise doesnot
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnSearch_Click(object sender, EventArgs e)
         {
             try
@@ -152,9 +193,13 @@ namespace Shivam_Sood_Sec003_Ex_01
                     throw new NoNullAllowedException();
                 }
                 int accno;
-                if ((accno = int.Parse(tbAccNo.Text)) < 0)
+                if (int.TryParse(tbAccNo.Text,out int result)) 
                 {
                     throw new FormatException();
+                }
+                else
+                {
+                    accno = result;
                 }
 
                 if (accounts.ContainsKey(accno))
@@ -183,6 +228,12 @@ namespace Shivam_Sood_Sec003_Ex_01
 
 
         }
+        /// <summary>
+        /// This Method Generates 5 Random Numbers and Add to the First of LinkedList
+        /// Then Goes through all the elements of LinkedList and displays on ListBox
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
 
         private void BtnGenerate_Click(object sender, EventArgs e)
         {
@@ -200,7 +251,13 @@ namespace Shivam_Sood_Sec003_Ex_01
             }
 
         }
-
+        /// <summary>
+        /// This Method Generates 1 Random Number and adds to the back of generated LinkedList
+        /// Then foreach loop loops through the list and upadtes the ListBox
+        /// It also checks if the list is Empty before adding to the list
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
 
         private void BtnAddBack_Click(object sender, EventArgs e)
         {
@@ -220,7 +277,12 @@ namespace Shivam_Sood_Sec003_Ex_01
             }
 
         }
-
+        /// <summary>
+        /// This Method removes the First Element on click
+        /// It also checks if the list is empty from start/All the elements are removed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnRemoveFront_Click(object sender, EventArgs e)
         {
             try
@@ -246,7 +308,12 @@ namespace Shivam_Sood_Sec003_Ex_01
             }
 
         }
-
+        /// <summary>
+        /// This Method Just Display whats the largest number in the LinkedList
+        /// Checks if the list is Empty to Begin With
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnMax_Click(object sender, EventArgs e)
         {
             try
