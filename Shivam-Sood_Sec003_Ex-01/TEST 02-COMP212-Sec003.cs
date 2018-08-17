@@ -39,7 +39,7 @@ namespace Shivam_Sood_Sec003_Ex_01
                 //Trying to Parse the value from Textbox to Intgers. Throws an Error if fails
                 //TryParsing is better if not using try/catch. Works both ways though.
                 int accno;
-                if (int.TryParse(tbAccNo.Text,out int results))
+                if (!int.TryParse(tbAccNo.Text,out int results))
                 {
                     throw new FormatException();
                 }
@@ -114,7 +114,7 @@ namespace Shivam_Sood_Sec003_Ex_01
                     throw new NoNullAllowedException();
                 }
                 int accno;
-                if (int.TryParse(tbAccNo.Text,out int result))
+                if (!int.TryParse(tbAccNo.Text,out int result))
                 {
                     throw new FormatException();
                 }
@@ -193,7 +193,7 @@ namespace Shivam_Sood_Sec003_Ex_01
                     throw new NoNullAllowedException();
                 }
                 int accno;
-                if (int.TryParse(tbAccNo.Text,out int result)) 
+                if (!int.TryParse(tbAccNo.Text,out int result)) 
                 {
                     throw new FormatException();
                 }
