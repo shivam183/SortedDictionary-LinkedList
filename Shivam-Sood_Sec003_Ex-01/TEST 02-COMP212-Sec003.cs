@@ -47,7 +47,7 @@ namespace Shivam_Sood_Sec003_Ex_01
                 {
                     accno = results;
                 }
-                //Don't need to check for validation Name can br anything
+                //Don't need to check for validation Name can be anything
                 //Even Number 
                 string name = tbCustName.Text;
 
@@ -125,12 +125,18 @@ namespace Shivam_Sood_Sec003_Ex_01
 
                 if (accounts.ContainsKey(accno))
                 {
-                    accounts.Remove(accno);
-                    MessageBox.Show($"Account Number {accno} deleted Sucessfully", "Sucess", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    DialogResult dialog= MessageBox.Show($"Are you sure you want to Remove the account with ID {accno}?\nThis Cannot be Undone!", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if(dialog==DialogResult.Yes)
+                    {
+                        accounts.Remove(accno);
+                        MessageBox.Show($"Account Number {accno} deleted Sucessfully", "Sucess", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+       
                 }
                 else
                 {
                     MessageBox.Show($"No Account with Account Number {accno} exists", "Fail", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    
                 }
             }
             catch (Exception ex)
@@ -143,6 +149,11 @@ namespace Shivam_Sood_Sec003_Ex_01
                 {
                     MessageBox.Show("Please Enter Account Number", "Empty Field", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
+            }
+            finally
+            {
+                RefreshList();
+                tbAccNo.Text = null;
             }
 
 
@@ -165,15 +176,22 @@ namespace Shivam_Sood_Sec003_Ex_01
             }
             else
             {
-                TbOutput.Text = null;
-                foreach (var item in accounts.Values)
-                {
-                    TbOutput.Text += ($"{item.ToString()}");
-                    TbOutput.AppendText(Environment.NewLine);
-
-                }
+                RefreshList();
             }
 
+        }
+        /// <summary>
+        /// This Method refreshes the list everytime when account is deleted Automatically
+        /// </summary>
+        private void RefreshList()
+        {
+            TbOutput.Text = null;
+            foreach (var item in accounts.Values)
+            {
+                TbOutput.Text += ($"{item.ToString()}");
+                TbOutput.AppendText(Environment.NewLine);
+
+            }
         }
 
 
@@ -205,7 +223,7 @@ namespace Shivam_Sood_Sec003_Ex_01
                 if (accounts.ContainsKey(accno))
                 {
                     MessageBox.Show($"Account with ID {accno} Exists", "Sucess", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
+                    tbAccNo.Text = null;
                 }
                 else
                 {
@@ -223,6 +241,11 @@ namespace Shivam_Sood_Sec003_Ex_01
                 {
                     MessageBox.Show($"Please Enter a Account Number", "Empty Search", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
+            }
+            finally
+            {
+                RefreshList();
+                tbAccNo.Text = null;
             }
 
 
@@ -273,7 +296,7 @@ namespace Shivam_Sood_Sec003_Ex_01
             }
             else
             {
-                MessageBox.Show("List is Empty", "Empty", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("List is Empty!! \nPlease Click Generate Button to populate the List", "Empty", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
         }
@@ -304,7 +327,7 @@ namespace Shivam_Sood_Sec003_Ex_01
             }
             catch (NullReferenceException)
             {
-                MessageBox.Show("List is Empty", "Empty", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("List is Empty!! \nPlease Click button Generate to populate the List ", "Empty", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
         }
@@ -331,7 +354,7 @@ namespace Shivam_Sood_Sec003_Ex_01
             }
             catch(NullReferenceException)
             {
-                MessageBox.Show("Empty List", "Empty List", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("List is Empty!! \nPlease Click Generate Button to Populate the List", "Empty List", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }
