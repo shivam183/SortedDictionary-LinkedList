@@ -26,18 +26,24 @@ namespace Shivam_Sood_Sec003_Ex_01
             InitializeComponent();
         }
 
+        /// <summary>
+        /// This Method First checks if the any of the textboxes are empty and then try to parse int and decimal 
+        /// entered in ID and balance box then it checks if the account with same ID already exist and throws error
+        /// if account exist. If everything is sucessfull this add new accounts to the Sorted Dictionary
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnInsert_Click(object sender, EventArgs e)
         {
 
             try
             {
-                //Check if any TextBoxes are Empty
+                
                 if (string.IsNullOrEmpty(tbAccNo.Text) || string.IsNullOrEmpty(tbCustName.Text) || string.IsNullOrEmpty(tbBalance.Text) || string.IsNullOrEmpty(tbBankerName.Text))
                 {
                     throw new NoNullAllowedException();
                 }
-                //Trying to Parse the value from Textbox to Intgers. Throws an Error if fails
-                //TryParsing is better if not using try/catch. Works both ways though.
+             
                 int accno;
                 if (!int.TryParse(tbAccNo.Text,out int results))
                 {
@@ -47,12 +53,10 @@ namespace Shivam_Sood_Sec003_Ex_01
                 {
                     accno = results;
                 }
-                //Don't need to check for validation Name can be anything
-                //Even Number 
+              
                 string name = tbCustName.Text;
 
-                //Trying to Parse the value from Textbox to Double. Throws an Error if fails
-                //Decimal value type is better for Handling money for precision in decimal points 
+           
                 decimal balance;
                 if (!decimal.TryParse(tbBalance.Text, out decimal result))
                 {
@@ -62,35 +66,40 @@ namespace Shivam_Sood_Sec003_Ex_01
                 {
                     balance = result;
                 }
-                //Don't need to Check for validation
+              
                 string bankerName = tbBankerName.Text;
-                //Calling non-default constructor and adding values from all textboxs and making new account
-                //Initialized the Object here. Better to do it here because sometimes it can throw NullPointException
-                account = new Account(accno, name, balance, bankerName);
-                //MessageBox Display after account gets added sucessfully
+                if(accounts.ContainsKey(accno))
+                {
+                    throw new DuplicateNameException();
+                }
+                 account = new Account(accno, name, balance, bankerName);
+               
                 MessageBox.Show($"New Account with name {name} is added sucessfully", "Sucess", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                //Adding the newly made Account to SortedDictionary with key as account number and Account as an Value
+
                 accounts.Add(accno, account);
-                //Making all TextBoxes text null so thats its ready to add another account 
-                //Saves Time
+                
                 tbAccNo.Text = null;
                 tbCustName.Text = null;
                 tbBalance.Text = null;
                 tbBankerName.Text = null;
 
             }
-            //Catching all types of Exception Specified Above
+          
             catch (Exception ex)
             {
-                //Checking for FormatException
+          
                 if (ex is FormatException)
                 {
                     MessageBox.Show($"Please Enter an positive Integer into Account Number Box or Balance Box", "Wrong Input", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-                //Checking For NoNullAllowedException
+              
                 if (ex is NoNullAllowedException)
                 {
                     MessageBox.Show("All Fields are Required", "Empty Fields", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+                if(ex is DuplicateNameException)
+                {
+                    MessageBox.Show("Account with Same ID already Exist!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
 
@@ -222,7 +231,13 @@ namespace Shivam_Sood_Sec003_Ex_01
 
                 if (accounts.ContainsKey(accno))
                 {
-                    MessageBox.Show($"Account with ID {accno} Exists", "Sucess", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    account = accounts[accno];
+                   
+                    DialogResult dialog= MessageBox.Show($"Account with ID {accno} Exists\nWould you like to see the details?", "Sucess", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                    if (dialog == DialogResult.Yes)
+                    {
+                        MessageBox.Show($"{account.ToString()}", "Sucess", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
                     tbAccNo.Text = null;
                 }
                 else

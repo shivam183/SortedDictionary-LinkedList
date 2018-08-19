@@ -28,7 +28,7 @@ namespace Shivam_Sood_Sec003_Ex_01
 
         public override string ToString()
         {
-            return $"Account Number: {AccountNumber}, CustomerName: {CustomerName}, Balance: {Balance:C}, Banker Name: {BankerName}";
+            return $"Account Number: {AccountNumber},\nCustomerName: {CustomerName},\nBalance: {Balance:C},\nBanker Name: {BankerName}";
         }
     }
 }
