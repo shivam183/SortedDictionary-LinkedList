@@ -45,26 +45,28 @@ namespace Shivam_Sood_Sec003_Ex_01
                 }
              
                 int accno;
-                if (!int.TryParse(tbAccNo.Text,out int results))
+                if (int.TryParse(tbAccNo.Text,out int results))
                 {
-                    throw new FormatException();
+                    accno = results;
+                    
                 }
                 else
                 {
-                    accno = results;
+                    throw new FormatException();
                 }
               
                 string name = tbCustName.Text;
 
            
                 decimal balance;
-                if (!decimal.TryParse(tbBalance.Text, out decimal result))
+                if (decimal.TryParse(tbBalance.Text, out decimal result))
                 {
-                    throw new FormatException();
+                    balance = result;
+                    
                 }
                 else
                 {
-                    balance = result;
+                    throw new FormatException();
                 }
               
                 string bankerName = tbBankerName.Text;
@@ -123,13 +125,14 @@ namespace Shivam_Sood_Sec003_Ex_01
                     throw new NoNullAllowedException();
                 }
                 int accno;
-                if (!int.TryParse(tbAccNo.Text,out int result))
+                if (int.TryParse(tbAccNo.Text,out int result))
                 {
-                    throw new FormatException();
+                    accno = result;
+                    
                 }
                 else
                 {
-                    accno = result;
+                    throw new FormatException();
                 }
 
                 if (accounts.ContainsKey(accno))
@@ -178,14 +181,15 @@ namespace Shivam_Sood_Sec003_Ex_01
         private void BtnDisplay_Click(object sender, EventArgs e)
         {
 
-            if (accounts.Count == 0)
+            if (accounts.Count != 0)
             {
-                MessageBox.Show($"Empty Dictionary", "Empty", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                TbOutput.Text = null;
+                RefreshList();
             }
             else
             {
-                RefreshList();
+                MessageBox.Show($"Empty Dictionary", "Empty", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                TbOutput.Text = null;
+                
             }
 
         }
@@ -220,13 +224,14 @@ namespace Shivam_Sood_Sec003_Ex_01
                     throw new NoNullAllowedException();
                 }
                 int accno;
-                if (!int.TryParse(tbAccNo.Text,out int result)) 
+                if (int.TryParse(tbAccNo.Text,out int result)) 
                 {
-                    throw new FormatException();
+                    accno = result;
+                    
                 }
                 else
                 {
-                    accno = result;
+                    throw new FormatException();
                 }
 
                 if (accounts.ContainsKey(accno))
